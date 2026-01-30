@@ -102,35 +102,47 @@ export function Encoder() {
 
       {/* Output Section */}
       {result?.success && (
-        <div className="space-y-4 animate-in fade-in-0 slide-in-from-bottom-4 duration-300">
-          <label className="block text-sm font-medium text-zinc-400 uppercase tracking-wider">
+        <div className="space-y-4 animate-slide-in-up">
+          <label className="text-sm font-medium text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
             Output
           </label>
 
           <Card
-            variant="bordered"
+            variant="cyber"
             className={cn(
               'flex flex-col items-center justify-center py-8 cursor-pointer',
-              'hover:border-emerald-500/50 transition-colors',
-              'group'
+              'hover:border-emerald-500/50 transition-all duration-300',
+              'hover:shadow-lg hover:shadow-emerald-500/20',
+              'group animate-success-pop'
             )}
             onClick={handleCopy}
           >
-            <span className="text-6xl mb-3 group-hover:scale-110 transition-transform">
+            {/* Success glow effect */}
+            <div className="absolute inset-0 bg-gradient-radial from-emerald-500/10 to-transparent rounded-xl pointer-events-none" />
+
+            <span className="text-6xl mb-3 group-hover:scale-125 transition-all duration-300 animate-float-subtle relative">
               {result.payload}
+              {/* Emoji glow */}
+              <span className="absolute inset-0 blur-xl opacity-50 pointer-events-none">
+                {result.payload}
+              </span>
             </span>
-            <p className="text-xs text-zinc-500">(click to copy)</p>
+            <p className="text-xs text-emerald-500/70 font-mono animate-pulse">(click to copy)</p>
           </Card>
 
           {stats && <StatsDisplay stats={stats} />}
 
           <Button
-            variant="secondary"
+            variant="cyber"
             onClick={handleCopy}
-            leftIcon={copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            className="w-full"
+            leftIcon={copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+            className={cn(
+              'w-full',
+              copied && 'border-emerald-500 bg-emerald-500/20'
+            )}
           >
-            {copied ? 'Copied!' : '📋 Copy to Clipboard'}
+            {copied ? '✓ Copied!' : '📋 Copy to Clipboard'}
           </Button>
         </div>
       )}

@@ -113,13 +113,20 @@ export function Decoder() {
 
       {/* Result Section */}
       {result && (
-        <div className="space-y-4 animate-in fade-in-0 slide-in-from-bottom-4 duration-300">
+        <div className="space-y-4 animate-slide-in-up">
           {/* Header with confidence */}
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
+            <label className="text-sm font-medium text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+              {result.success && (
+                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              )}
               Revealed Message
             </label>
-            <Badge {...getConfidenceBadge(result.confidence)}>
+            <Badge
+              {...getConfidenceBadge(result.confidence)}
+              glow={result.success}
+              pulse={result.success}
+            >
               {result.success ? (
                 <CheckCircle className="w-3 h-3" />
               ) : (
@@ -131,51 +138,72 @@ export function Decoder() {
 
           {/* Message Display */}
           <Card
-            variant="bordered"
+            variant="cyber"
             className={cn(
-              'relative',
-              result.success ? 'border-emerald-500/30' : 'border-red-500/30'
+              'relative overflow-hidden',
+              result.success
+                ? 'border-emerald-500/30 animate-success-pop'
+                : 'border-red-500/30 animate-error-shake'
             )}
           >
             {result.success && result.message ? (
               <>
-                <div className="font-mono text-sm whitespace-pre-wrap break-words text-zinc-100">
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none rounded-xl" />
+                {/* Background effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-emerald-500/5 pointer-events-none rounded-xl" />
+
+                {/* Typewriter-style message */}
+                <div className="font-mono text-sm whitespace-pre-wrap break-words text-zinc-100 animate-reveal">
                   {result.message}
+                  <span className="inline-block w-2 h-4 bg-emerald-500 ml-1 animate-pulse" />
                 </div>
+
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleCopyMessage}
-                  className="absolute top-2 right-2"
+                  className={cn(
+                    'absolute top-2 right-2 transition-all',
+                    copied && 'text-emerald-400'
+                  )}
                 >
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </>
             ) : (
-              <p className="text-zinc-500 italic">
-                {result.error || 'No hidden message found'}
-              </p>
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-400" />
+                <p className="text-zinc-500 italic">
+                  {result.error || 'No hidden message found'}
+                </p>
+              </div>
             )}
           </Card>
 
           {/* Metadata */}
           {result.metadata.hiddenCharsFound > 0 && (
-            <div className="flex gap-3 text-xs text-zinc-500 font-mono">
-              <span>Hidden chars: {result.metadata.hiddenCharsFound}</span>
+            <div className="flex gap-3 text-xs text-zinc-500 font-mono bg-zinc-900/50 rounded-lg p-2 border border-zinc-800">
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full" />
+                Hidden chars: {result.metadata.hiddenCharsFound}
+              </span>
               {result.metadata.estimatedEncoding && (
-                <span>Encoding: {result.metadata.estimatedEncoding.toUpperCase()}</span>
+                <span className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full" />
+                  Encoding: {result.metadata.estimatedEncoding.toUpperCase()}
+                </span>
               )}
             </div>
           )}
 
           {/* Hex View */}
           {showHexView && (result.hexView || result.binaryView) && (
-            <HexViewer
-              hexData={result.hexView}
-              binaryData={result.binaryView}
-              showBinary={false}
-            />
+            <div className="animate-slide-in-up">
+              <HexViewer
+                hexData={result.hexView}
+                binaryData={result.binaryView}
+                showBinary={false}
+              />
+            </div>
           )}
         </div>
       )}
