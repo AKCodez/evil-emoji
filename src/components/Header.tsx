@@ -67,8 +67,8 @@ export function Header() {
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            size="sm"
-            onClick={() => window.open('https://github.com', '_blank')}
+              size="sm"
+              onClick={() => window.open('https://github.com/AKCodez/evil-emoji', '_blank')}
             aria-label="View on GitHub"
             className="hover:text-emerald-400 hover:bg-emerald-500/10 transition-all hover-pulse-glow"
           >
