@@ -31,14 +31,17 @@ export default function RootLayout({
       >
         {children}
         <Toaster
-          position="bottom-right"
+          position="top-right"
           theme="dark"
+          richColors
           toastOptions={{
             style: {
               background: '#18181b',
               border: '1px solid #27272a',
               color: '#fafafa',
+              fontFamily: 'var(--font-mono)',
             },
+            className: 'font-mono',
           }}
         />
       </body>

@@ -16,6 +16,9 @@ import type {
 import { ZERO_WIDTH, MAX_PAYLOAD_SIZE, DEFAULT_EMOJI } from './constants';
 import { calculateChecksum, isValidEmoji, getVisibleLength } from './utils';
 
+// Re-export types for convenience
+export type { EncodeOptions, EncodeResult, DecodeOptions, DecodeResult, ConfidenceLevel };
+
 /**
  * Convert a string to binary representation using UTF-8 encoding
  */
