@@ -55,11 +55,57 @@ export interface EncodedPayload {
 }
 
 // Tab types for the UI
-export type TabType = 'encoder' | 'decoder';
+export type TabType = 'encoder' | 'decoder' | 'injection';
 
 // Emoji preset type
 export interface EmojiPreset {
   emoji: string;
   name: string;
 }
+
+// LLM Injection types
+export type EmbedPosition = 'prefix' | 'suffix' | 'interleaved' | 'sandwich';
+export type EncodingVariant = 'standard' | 'extended' | 'combining' | 'variation';
+
+export interface InjectionPreset {
+  id: string;
+  name: string;
+  payload: string;
+  description: string;
+  category: 'prompt' | 'jailbreak' | 'extraction' | 'confusion';
+}
+
+export interface InjectionOptions {
+  payload: string;
+  carrierText: string;
+  position: EmbedPosition;
+  encodingVariant: EncodingVariant;
+  repetitions: number;
+}
+
+export interface InjectionResult {
+  success: boolean;
+  output: string;
+  payload: string;
+  metadata: {
+    timestamp: string;
+    encodingMethod: EncodingVariant;
+    payloadHash: string;
+    charCount: number;
+    hiddenCharCount: number;
+    visibleText: string;
+    position: EmbedPosition;
+    repetitions: number;
+  };
+  charBreakdown: {
+    char: string;
+    name: string;
+    count: number;
+    unicode: string;
+  }[];
+  hexView: string;
+  error?: string;
+}
+
+export type ExportFormat = 'json' | 'csv' | 'jsonl';
 

@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Lock, Unlock } from 'lucide-react';
-import { Header, Encoder, Decoder, Card, Tabs, TabPanel } from '@/components';
+import { Lock, Unlock, Target } from 'lucide-react';
+import { Header, Encoder, Decoder, LLMInjection, Card, Tabs, TabPanel } from '@/components';
 import { useKeyboardShortcuts } from '@/hooks';
 import type { TabType } from '@/types';
+
+// Check if LLM Injection tab is enabled via environment variable
+const ENABLE_LLM_INJECTION = process.env.NEXT_PUBLIC_ENABLE_LLM_INJECTION === 'true';
 
 // Matrix rain background component
 function MatrixBackground() {
@@ -50,10 +53,18 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  const tabs = useMemo(() => [
-    { id: 'encoder', label: 'ENCODER', icon: <Lock className="w-4 h-4" /> },
-    { id: 'decoder', label: 'DECODER', icon: <Unlock className="w-4 h-4" /> },
-  ], []);
+  const tabs = useMemo(() => {
+    const baseTabs = [
+      { id: 'encoder', label: 'ENCODER', icon: <Lock className="w-4 h-4" /> },
+      { id: 'decoder', label: 'DECODER', icon: <Unlock className="w-4 h-4" /> },
+    ];
+
+    if (ENABLE_LLM_INJECTION) {
+      baseTabs.push({ id: 'injection', label: 'LLM INJECTION', icon: <Target className="w-4 h-4" /> });
+    }
+
+    return baseTabs;
+  }, []);
 
   // Keyboard shortcuts
   useKeyboardShortcuts([
@@ -67,6 +78,11 @@ export default function Home() {
       ctrlKey: true,
       action: () => setActiveTab('decoder'),
     },
+    ...(ENABLE_LLM_INJECTION ? [{
+      key: 'i',
+      ctrlKey: true,
+      action: () => setActiveTab('injection'),
+    }] : []),
   ]);
 
   return (
@@ -97,6 +113,12 @@ export default function Home() {
           <TabPanel isActive={activeTab === 'decoder'}>
             <Decoder />
           </TabPanel>
+
+          {ENABLE_LLM_INJECTION && (
+            <TabPanel isActive={activeTab === 'injection'}>
+              <LLMInjection />
+            </TabPanel>
+          )}
         </Card>
 
         {/* Keyboard Shortcuts Help */}
@@ -113,6 +135,14 @@ export default function Home() {
             <kbd className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700 hover:border-emerald-500/50 transition-colors">D</kbd>
             <span className="text-zinc-500">Decoder</span>
           </span>
+          {ENABLE_LLM_INJECTION && (
+            <span className="flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700 hover:border-emerald-500/50 transition-colors">Ctrl</kbd>
+              <span className="text-zinc-700">+</span>
+              <kbd className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700 hover:border-emerald-500/50 transition-colors">I</kbd>
+              <span className="text-zinc-500">Injection</span>
+            </span>
+          )}
         </div>
       </main>
 
