@@ -91,12 +91,15 @@ export interface TabPanelProps {
 }
 
 export function TabPanel({ children, isActive, className }: TabPanelProps) {
-  if (!isActive) return null;
-
+  // Use hidden instead of conditional rendering to persist state
   return (
     <div
       role="tabpanel"
-      className={cn('animate-slide-in-up', className)}
+      className={cn(
+        isActive ? 'animate-slide-in-up' : 'hidden',
+        className
+      )}
+      aria-hidden={!isActive}
     >
       {children}
     </div>

@@ -154,7 +154,6 @@ export function Decoder() {
                 {/* Typewriter-style message */}
                 <div className="font-mono text-sm whitespace-pre-wrap break-words text-zinc-100 animate-reveal">
                   {result.message}
-                  <span className="inline-block w-2 h-4 bg-emerald-500 ml-1 animate-pulse" />
                 </div>
 
                 <Button

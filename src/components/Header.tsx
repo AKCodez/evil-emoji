@@ -60,7 +60,6 @@ export function Header() {
               <span className="group-hover:text-emerald-400 transition-colors">
                 Zero-Width Steganography Terminal
               </span>
-              <span className="animate-blink-cursor inline-block w-2 h-3 bg-emerald-500 ml-1" />
             </p>
           </div>
         </div>

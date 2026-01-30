@@ -17,7 +17,7 @@ export function Encoder() {
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleEncode = useCallback(() => {
+  const handleEncode = useCallback(async () => {
     if (!secretMessage.trim()) {
       toast.error('Please enter a secret message', { icon: '⚠️' });
       return;
@@ -26,7 +26,7 @@ export function Encoder() {
     setIsLoading(true);
 
     // Simulate slight delay for UX
-    setTimeout(() => {
+    setTimeout(async () => {
       const encodeResult = encode({
         coverEmoji,
         secretMessage: secretMessage.trim(),
@@ -36,8 +36,16 @@ export function Encoder() {
       setResult(encodeResult);
       setIsLoading(false);
 
-      if (encodeResult.success) {
-        toast.success('Message encoded successfully!', { icon: '🔒' });
+      if (encodeResult.success && encodeResult.payload) {
+        // Auto-copy to clipboard
+        try {
+          await navigator.clipboard.writeText(encodeResult.payload);
+          setCopied(true);
+          toast.success('Encoded & copied to clipboard!', { icon: '📋' });
+          setTimeout(() => setCopied(false), 2000);
+        } catch {
+          toast.success('Message encoded successfully!', { icon: '🔒' });
+        }
       } else {
         toast.error(encodeResult.error || 'Encoding failed', { icon: '⚠️' });
       }
